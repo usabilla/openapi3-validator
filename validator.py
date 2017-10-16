@@ -12,7 +12,7 @@ def help():
 
 
 def main(argv):
-    if (len(argv) != 1):
+    if len(argv) == 0:
         print('Invalid usage!')
         help()
         sys.exit(2)
