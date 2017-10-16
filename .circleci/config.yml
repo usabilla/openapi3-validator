@@ -1,0 +1,16 @@
+version: 2
+
+workflows:
+  version: 2
+  quality-tools:
+    jobs:
+      - pep8 
+
+jobs:
+  pep8:
+    docker:
+      - image: circleci/python:3.6-jessie 
+    steps:
+      - checkout
+      - run: sudo pip install pep8 
+      - run: pep8 validator.py 
