@@ -8,7 +8,7 @@ def validate(file_name):
 
 
 def help():
-    print ('usage: ' + path.basename(__file__) + ' <spec>')
+    print('usage: ' + path.basename(__file__) + ' <spec>')
 
 
 def main(argv):
