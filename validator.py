@@ -1,17 +1,22 @@
 import sys
-from jsonschema.exceptions import RefResolutionError
-from colors import color
 from os import path, getcwd
-from openapi_spec_validator.handlers import UrlHandler
+
+from colors import color
+from jsonschema.exceptions import RefResolutionError
 from openapi_spec_validator import openapi_v3_spec_validator
+from openapi_spec_validator.handlers import UrlHandler
+from six.moves.urllib.parse import urlparse
 
 
-def validate(file_name):
+def validate(url):
     counter = 0
 
     try:
-        handler = UrlHandler('file')
-        url = 'file://' + path.join(getcwd(), file_name)
+        handler = UrlHandler('http', 'https', 'file')
+
+        if not urlparse(url).scheme:
+            url = 'file://' + path.join(getcwd(), url)
+
         spec = handler(url)
 
         for i in openapi_v3_spec_validator.iter_errors(spec, spec_url=url):
