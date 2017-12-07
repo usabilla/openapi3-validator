@@ -36,7 +36,7 @@ def validate(url):
             f'Unable to resolve {e.__context__.args[0]} in {e.args[0]}',
             ''
         )
-    except:
+    except BaseException:
         counter += 1
         print_error(counter, '', sys.exc_info()[0], '')
     finally:
