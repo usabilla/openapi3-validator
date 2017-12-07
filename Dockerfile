@@ -1,5 +1,7 @@
 FROM circleci/python:3.6-jessie
 
-RUN sudo pip install openapi-spec-validator ansicolors
-
+COPY requirements.txt /opt/
 COPY validator.py /opt/
+
+RUN sudo pip install -r /opt/requirements.txt
+
