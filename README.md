@@ -32,7 +32,7 @@ $ docker run -it --rm usabillabv/openapi3-validator <uri>
 Optionally you can create an alias and just use it, like:
 
 ```sh
-$ alias openapi3-validate="docker run -it --rm -v $(pwd):/project -w /project usabillabv/openapi3-validator"
+$ alias openapi3-validate='docker run -it --rm -v $(pwd):/project -w /project usabillabv/openapi3-validator'
 $ openapi3-validate <path to your file or uri>
 ```
 
