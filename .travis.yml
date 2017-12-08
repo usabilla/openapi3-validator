@@ -38,5 +38,5 @@ jobs:
             - docker-ce
       script:
         - docker build -t openapi-validator .
-        - docker run --rm -it openapi-validator python /opt/validator.py https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v3.0/petstore.yaml
+        - docker run --rm -it openapi-validator https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v3.0/petstore.yaml
 

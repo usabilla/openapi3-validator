@@ -10,36 +10,29 @@ specification](https://github.com/OAI/OpenAPI-Specification/blob/master/versions
 
 ## Usage
 
-### CI server
 
-We currently use Circle-CI to validate our pull requests, and their new
-configuration format (v2) allows us to use customised docker images to run the
-jobs. So we just had to add this workflow job:
-
-```yml
-  validate-spec:
-    docker:
-      - image: usabillabv/openapi3-validator
-    steps:
-      - checkout
-      - run: python /opt/validator.py <path to your file>
-```
-
-### Development
-
-We can also use this image locally by running the following command (on the root
-folder of your project:
+First you need to pull the image from [Docker Hub](https://hub.docker.com):
 
 ```sh
-$ docker run -it --rm -v ${PWD}:/project -w /project usabillabv/openapi3-validator python /opt/validator.py <path to your file>
+docker pull usabillabv/openapi3-validator
+```
+
+Then you can use it to validate specs available on a shared volume:
+
+```sh
+$ docker run -it --rm -v ${PWD}:/project -w /project usabillabv/openapi3-validator <path to your file>
+```
+
+Or available via an HTTP(s) endpoint:
+
+```sh
+$ docker run -it --rm usabillabv/openapi3-validator <uri>
 ```
 
 Optionally you can create an alias and just use it, like:
 
 ```sh
-$ alias openapi3-validate="docker run -it --rm -v ${PWD}:/project -w /project usabillabv/openapi3-validator python /opt/validator.py"
-$ openapi3-validate <path to your file>
+$ alias openapi3-validate="docker run -it --rm -v ${PWD}:/project -w /project usabillabv/openapi3-validator"
+$ openapi3-validate <path to your file or uri>
 ```
 
-The output is not really friendly but it does the basic stuff (exit code is
-correct).
