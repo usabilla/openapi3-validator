@@ -1,7 +1,9 @@
-FROM circleci/python:3.6-jessie
+FROM python:3.6-alpine
 
-COPY requirements.txt /opt/
-COPY validator.py /opt/
+COPY requirements.txt /opt/openapi-validator/
+COPY validator.py /opt/openapi-validator/
 
-RUN sudo pip install -r /opt/requirements.txt
+RUN pip install -r /opt/openapi-validator/requirements.txt
+
+ENTRYPOINT ["python", "/opt/openapi-validator/validator.py"]
 
