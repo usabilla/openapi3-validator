@@ -1,16 +1,23 @@
-import sys
-from os import path, getcwd
+import pkg_resources
+pkg_resources.require("openapi_spec_validator==0.3.1")
 
-from jsonschema.exceptions import RefResolutionError
+import sys
+import jsonschema
+
+from sys import argv
+from os import path, getcwd
+from openapi_spec_validator import validate_spec
 from openapi_spec_validator import openapi_v3_spec_validator
 from openapi_spec_validator.handlers import UrlHandler
 
+
 def validate(url):
-    url = str(url[0])
+    
     counter = 0
     try:
         handler = UrlHandler('file')
         url = 'file://' + path.join(getcwd(), url)
+
         spec = handler(url)
 
         for i in openapi_v3_spec_validator.iter_errors(spec, spec_url=url):
@@ -22,7 +29,7 @@ def validate(url):
                 i.instance
             )
 
-    except RefResolutionError as e:
+    except jsonschema.RefResolutionError as e:
         counter += 1
         print_error(
             counter,
@@ -52,7 +59,13 @@ def print_error(count, path, message, instance):
 
 
 def help():
+    print("Use at least Python 3.5.0")
     print("usage: " + path.basename(__file__) + " <spec>")
+    print("-v Python Version")
+    print("-a Assume openapi.yaml in ")
+    print("Example: python validator.py openapi.yaml")
+    print("Example: python validator.py -v")
+
 
 
 def main(argv):
@@ -63,6 +76,26 @@ def main(argv):
 
     sys.exit(validate(argv))
 
+def initValidations():
+    if (len(sys.argv) < 2):
+        help()
+        exit(1)
+
+    if (sys.argv[1] == "-v"):
+        print(sys.version_info)
+        exit(0)
+
+    if (sys.version_info < (3, 5, 0)):
+        print("Minumum version Python 3.5.0")
+        exit(0)
+
+    if (sys.argv[1] == "-a"):
+        main("openapi.yaml")    
+        exit(0)
+
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+
+    initValidations()
+
+    main(sys.argv[1])
