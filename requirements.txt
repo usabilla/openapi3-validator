@@ -1,2 +1,3 @@
 openapi-spec-validator
 ansicolors
+six
