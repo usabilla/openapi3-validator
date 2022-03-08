@@ -1,0 +1,74 @@
+name: smoke-tests-action
+on:
+  pull_request:
+    types: [opened, synchronize]
+jobs:
+  build-docker-run-tests:
+    runs-on: ubuntu-latest
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Set up docker buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          driver-opts: network=host
+      - name: Build docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          builder: ${{ steps.buildx.outputs.name }}
+          push: true
+          tags: localhost:5000/openapi-validator:latest
+          cache-to: type=inline
+      - name: Tests setup
+        run: |
+          # Download spec files
+          mkdir -p $(pwd)/path/to/specs
+          curl https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v3.0/link-example.yaml --output $(pwd)/path/openapi.yaml
+          curl https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v3.0/petstore.yaml --output $(pwd)/path/to/foo-openapi.yaml
+          curl https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v3.0/api-with-examples.yaml --output $(pwd)/path/to/specs/bar-openapi.yaml
+      - name: Spec url tests
+        run: |
+          # Create an alias
+          shopt -s expand_aliases
+          alias openapi3-validate='docker run --rm localhost:5000/openapi-validator'
+          # legacy mode check
+          openapi3-validate https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v3.0/petstore.yaml
+          # normal mode checks
+          openapi3-validate --url https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v3.0/petstore.yaml \
+                            --url https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v3.0/api-with-examples.yaml
+          openapi3-validate --url https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v3.0/api-with-examples.yaml
+          openapi3-validate --url https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v3.0/callback-example.yaml
+          openapi3-validate --url https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v3.0/link-example.yaml
+          openapi3-validate -u https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v3.0/petstore-expanded.yaml
+          openapi3-validate -u https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v3.0/uspto.yaml
+          # negative scenario check
+          ! openapi3-validate --url https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/tests/v3.1/fail/invalid_schema_types.yaml
+      - name: Spec full path tests
+        run: |
+          # Create an alias
+          shopt -s expand_aliases
+          alias openapi3-validate='docker run --rm -v $(pwd):/project -w /project localhost:5000/openapi-validator'
+          # legacy mode check
+          openapi3-validate /project/path/to/foo-openapi.yaml
+          # normal mode checks
+          openapi3-validate --file /project/path/to/foo-openapi.yaml --file /project/path/to/specs/bar-openapi.yaml
+          openapi3-validate -f /project/path/openapi.yaml
+      - name: Spec lookup tests
+        run: |
+          # Create an alias
+          shopt -s expand_aliases
+          alias openapi3-validate='docker run --rm -v $(pwd):/project -w /project localhost:5000/openapi-validator'
+          # lookup spec by default name openapi.yaml
+          openapi3-validate --path /project
+          # lookup spec by custom name with wildcard
+          openapi3-validate --path /project --spec-name '*openapi.yaml' 
+          # lookup spec by custom names
+          openapi3-validate -p /project -n foo-openapi.yaml -n bar-openapi.yaml
