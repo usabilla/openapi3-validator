@@ -69,3 +69,22 @@ def print_error(count, path, message, instance):
     )
     print("    %s" % message)
     print("    %s" % instance)
+
+
+# For legacy mode only - some existing pipelines override docker image entry point
+# and use this validator.py module directly instead of main one
+def help():
+    print('usage: ' + path.basename(__file__) + ' <spec>')
+
+
+def main(argv):
+    if len(argv) == 0:
+        print('Invalid usage!')
+        help()
+        sys.exit(2)
+
+    sys.exit(validate(argv[0]))
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])

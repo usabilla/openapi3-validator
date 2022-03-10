@@ -72,3 +72,6 @@ jobs:
           openapi3-validate --path /project --spec-name '*openapi.yaml' 
           # lookup spec by custom names
           openapi3-validate -p /project -n foo-openapi.yaml -n bar-openapi.yaml
+      - name: Legacy validator script run
+        run: |
+          docker run --rm -v $(pwd):/project -w /project --entrypoint python localhost:5000/openapi-validator /opt/openapi-validator/validator.py /project/path/to/foo-openapi.yaml
