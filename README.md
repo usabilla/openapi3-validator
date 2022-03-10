@@ -29,6 +29,8 @@ options:
   -p PATH, --path PATH  open api spec files lookup path
   -n SPEC_NAME, --spec-name SPEC_NAME
                         open api spec file name, multiple arguments are supported. Used in conjunction with --path option. Default value: openapi.yaml
+  -i, --ignore-missing-spec
+                        do not fail processing if spec file is missing. Used in conjunction with --path option.                      
 ```
 
 Then you can use it to validate specs available on a shared volume.

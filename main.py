@@ -43,6 +43,9 @@ def init_args_parser():
                         help="open api spec file name, multiple arguments are supported. " +
                              "Used in conjunction with --path option. Default value: " +
                              ','.join(_DEFAULT_OPEN_API_SPEC_NAMES))
+    parser.add_argument("-i", "--ignore-missing-spec",
+                        help="do not fail processing if spec file is missing. Used in conjunction with --path option.",
+                        action="store_true")
     return parser
 
 
@@ -77,7 +80,8 @@ def get_spec_file_paths(args, spec_file_names):
     else:
         spec_file_paths = args.url
 
-    if len(spec_file_paths) == 0:
+    # ignore_missing_spec should be working only if path argument is present
+    if len(spec_file_paths) == 0 and not args.ignore_missing_spec and args.path is not None:
         print(
             color(
                 ' [FAIL] open api spec is not found',
