@@ -61,6 +61,8 @@ jobs:
           # normal mode checks
           openapi3-validate --file /project/path/to/foo-openapi.yaml --file /project/path/to/specs/bar-openapi.yaml
           openapi3-validate -f /project/path/openapi.yaml
+          # negative scenario check - ignore-missing-spec should't work for direct file path
+          ! openapi3-validate -f /project/non/existing/file.yaml -i
       - name: Spec lookup tests
         run: |
           # Create an alias
@@ -70,6 +72,8 @@ jobs:
           openapi3-validate --path /project
           # lookup spec by custom name with wildcard
           openapi3-validate --path /project --spec-name '*openapi.yaml' 
+          # check --ignore-missing-spec argument
+          openapi3-validate --path /project --spec-name non-existing-spec.yaml --ignore-missing-spec
           # lookup spec by custom names
           openapi3-validate -p /project -n foo-openapi.yaml -n bar-openapi.yaml
       - name: Legacy validator script run
