@@ -4,7 +4,7 @@ on:
     types: [opened, synchronize]
 jobs:
   build-docker-run-tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     services:
       registry:
         image: registry:2
