@@ -1,0 +1,18 @@
+version: 1 # This ensures backwards compatibilities
+team: platform # The team that owns that project
+
+plugins:
+  approve-dependabot-prs:
+    enabled: false
+  assign-milestone:
+    enabled: true
+  close-milestone-from-github-release:
+    enabled: true
+  create-github-release-from-git-tag:
+    enabled: true
+  create-next-milestone:
+    enabled: true
+  merge-dependabot-prs:
+    enabled: false
+  remove-milestone-from-unmerged-pr:
+    enabled: true
