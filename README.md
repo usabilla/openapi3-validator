@@ -28,7 +28,7 @@ options:
   -u URL, --url URL     uri to open api spec, multiple arguments are supported
   -p PATH, --path PATH  open api spec files lookup path
   -n SPEC_NAME, --spec-name SPEC_NAME
-                        open api spec file name, multiple arguments are supported. Used in conjunction with --path option. Default value: openapi.yaml
+                        open api spec file name, multiple arguments are supported. Used in conjunction with --path option. Default value: *openapi.yaml, *openapi.yml
   -i, --ignore-missing-spec
                         do not fail processing if spec file is missing. Used in conjunction with --path option.                      
 ```

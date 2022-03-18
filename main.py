@@ -4,7 +4,7 @@ from validator import validate
 from lookup import files_lookup
 from colors import color
 
-_DEFAULT_OPEN_API_SPEC_NAMES = {"openapi.yaml"}
+_DEFAULT_OPEN_API_SPEC_NAMES = {"*openapi.yaml", "*openapi.yml"}
 
 
 def main(argv):
