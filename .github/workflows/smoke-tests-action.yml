@@ -69,11 +69,11 @@ jobs:
           shopt -s expand_aliases
           alias openapi3-validate='docker run --rm -v $(pwd):/project -w /project localhost:5000/openapi-validator'
           # lookup spec by default name openapi.yaml
-          openapi3-validate --path /project
+          openapi3-validate --lookup-path /project
           # lookup spec by custom name with wildcard
-          openapi3-validate --path /project --spec-name '*openapi.yaml' 
+          openapi3-validate --lookup-path /project --spec-name '*openapi.yaml' 
           # check --ignore-missing-spec argument
-          openapi3-validate --path /project --spec-name non-existing-spec.yaml --ignore-missing-spec
+          openapi3-validate --lookup-path /project --spec-name non-existing-spec.yaml --ignore-missing-spec
           # lookup spec by custom names
           openapi3-validate -p /project -n foo-openapi.yaml -n bar-openapi.yaml
       - name: Legacy validator script run

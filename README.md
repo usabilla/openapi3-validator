@@ -18,7 +18,7 @@ docker pull usabillabv/openapi3-validator
 
 The validator can be run with the following arguments:
 ```sh
-usage: [-h] (-f FILE | -u URL | -p PATH) [-n SPEC_NAME]
+usage: main.py [-h] (-f FILE | -u URL | -p LOOKUP_PATH) [-n SPEC_NAME] [-i]
 
 Open API spec validation tool
 
@@ -26,11 +26,13 @@ options:
   -h, --help            show this help message and exit
   -f FILE, --file FILE  full path to open api spec file, multiple arguments are supported
   -u URL, --url URL     uri to open api spec, multiple arguments are supported
-  -p PATH, --path PATH  open api spec files lookup path
+  -p LOOKUP_PATH, --lookup-path LOOKUP_PATH
+                        open api spec files lookup path
   -n SPEC_NAME, --spec-name SPEC_NAME
-                        open api spec file name, multiple arguments are supported. Used in conjunction with --path option. Default value: *openapi.yaml, *openapi.yml
+                        open api spec file name, multiple arguments are supported. Used in conjunction with --lookup-path option. Default value:
+                        *openapi.yml,*openapi.yaml
   -i, --ignore-missing-spec
-                        do not fail processing if spec file is missing. Used in conjunction with --path option.                      
+                        do not fail processing if spec file is missing. Used in conjunction with --lookup-path option.                     
 ```
 
 Then you can use it to validate specs available on a shared volume.

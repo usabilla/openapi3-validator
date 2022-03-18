@@ -36,15 +36,15 @@ def init_args_parser():
     group.add_argument("-u", "--url",
                        action='append',
                        help="uri to open api spec, multiple arguments are supported")
-    group.add_argument("-p", "--path",
+    group.add_argument("-p", "--lookup-path",
                        help="open api spec files lookup path")
     parser.add_argument("-n", "--spec-name",
                         action='append',
                         help="open api spec file name, multiple arguments are supported. " +
-                             "Used in conjunction with --path option. Default value: " +
+                             "Used in conjunction with --lookup-path option. Default value: " +
                              ','.join(_DEFAULT_OPEN_API_SPEC_NAMES))
     parser.add_argument("-i", "--ignore-missing-spec",
-                        help="do not fail processing if spec file is missing. Used in conjunction with --path option.",
+                        help="do not fail processing if spec file is missing. Used in conjunction with --lookup-path option.",
                         action="store_true")
     return parser
 
@@ -73,15 +73,15 @@ def perform_validation(args):
 
 
 def get_spec_file_paths(args, spec_file_names):
-    if args.path is not None:
-        spec_file_paths = files_lookup(args.path, spec_file_names)
+    if args.lookup_path is not None:
+        spec_file_paths = files_lookup(args.lookup_path, spec_file_names)
     elif args.file is not None:
         spec_file_paths = args.file
     else:
         spec_file_paths = args.url
 
     # ignore_missing_spec should be working only if path argument is present
-    if len(spec_file_paths) == 0 and not args.ignore_missing_spec and args.path is not None:
+    if len(spec_file_paths) == 0 and not args.ignore_missing_spec and args.lookup_path is not None:
         print(
             color(
                 ' [FAIL] open api spec is not found',
