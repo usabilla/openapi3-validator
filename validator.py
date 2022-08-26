@@ -10,15 +10,19 @@ from openapi_spec_validator import validate_spec
 from openapi_spec_validator import openapi_v3_spec_validator
 from openapi_spec_validator.handlers import UrlHandler
 
+def getspec(url):
+        handler = UrlHandler('file')
+        url = 'file://' + path.join(getcwd(), url)
+        spec = handler(url)
+        return spec
+
 
 def validate(url):
     
     counter = 0
     try:
-        handler = UrlHandler('file')
-        url = 'file://' + path.join(getcwd(), url)
 
-        spec = handler(url)
+        spec = getspec(url)
 
         for i in openapi_v3_spec_validator.iter_errors(spec, spec_url=url):
             counter += 1
@@ -96,6 +100,7 @@ def initValidations():
 
 if __name__ == "__main__":
 
-    initValidations()
+    #initValidations()
 
-    main(sys.argv[1])
+    main("openapi.yaml")
+    #main(sys.argv[1])
